@@ -1,0 +1,553 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    --mouseX: 50vw;
+    --mouseY: 50vh;
+
+    min-height: 100vh;
+    font-family: Consolas, "Courier New", monospace;
+    color: #e9fff0;
+    text-align: center;
+    padding: 58px 20px;
+    overflow-x: hidden;
+    position: relative;
+
+    background:
+        conic-gradient(
+            from 120deg at var(--mouseX) var(--mouseY),
+            transparent 0deg,
+            rgba(50, 180, 95, 0.045) 70deg,
+            transparent 140deg,
+            transparent 360deg
+        ),
+        linear-gradient(
+            135deg,
+            rgba(40, 255, 130, 0.025) 0%,
+            transparent 22%,
+            transparent 58%,
+            rgba(40, 255, 130, 0.02) 100%
+        ),
+        radial-gradient(circle at 18% 20%, rgba(0, 75, 42, 0.16), transparent 32%),
+        radial-gradient(circle at 82% 78%, rgba(0, 42, 28, 0.22), transparent 38%),
+        linear-gradient(135deg, #010302, #020504 45%, #010302 100%);
+}
+
+/* subtle background structure, no words */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -2;
+
+    background:
+        linear-gradient(115deg, transparent 8%, rgba(80, 255, 150, 0.035) 9%, transparent 10%),
+        linear-gradient(245deg, transparent 18%, rgba(80, 255, 150, 0.028) 19%, transparent 20%),
+        linear-gradient(35deg, transparent 68%, rgba(80, 255, 150, 0.03) 69%, transparent 70%),
+        repeating-linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.018) 0px,
+            rgba(255, 255, 255, 0.018) 1px,
+            transparent 1px,
+            transparent 52px
+        );
+
+    opacity: 0.7;
+}
+
+/* mouse-reactive layer, not a bubble */
+body::after {
+    content: "";
+    position: fixed;
+    inset: -20%;
+    pointer-events: none;
+    z-index: -1;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent 0%,
+            transparent 36%,
+            rgba(50, 255, 130, 0.055) 48%,
+            transparent 60%,
+            transparent 100%
+        ),
+        radial-gradient(circle at 72% 22%, rgba(40, 150, 85, 0.055), transparent 24%),
+        radial-gradient(circle at 22% 82%, rgba(40, 150, 85, 0.045), transparent 26%);
+
+    transform: translate(
+        calc((var(--mouseX) - 50vw) / 45),
+        calc((var(--mouseY) - 50vh) / 45)
+    );
+
+    transition: transform 0.14s linear;
+}
+
+/* hero section */
+.hero {
+    margin-bottom: 42px;
+}
+
+/* main title */
+.app-title {
+    display: inline-block;
+    color: #f2fff6;
+    font-size: 44px;
+    font-weight: 500;
+    letter-spacing: 8px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+    animation: terminalReveal 1.4s steps(8, end) forwards;
+}
+
+/* subtitle */
+.tagline {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 36px;
+    color: #77d99d;
+    font-size: 15px;
+    letter-spacing: 2.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+    animation: terminalReveal 1.9s steps(29, end) forwards;
+    animation-delay: 0.45s;
+}
+
+/* search area */
+.search-area {
+    margin-top: 10px;
+}
+
+input {
+    width: 330px;
+    padding: 15px 18px;
+    border-radius: 8px;
+    border: 1px solid #173f28;
+    outline: none;
+    background: rgba(2, 6, 4, 0.94);
+    color: #e9fff0;
+    font-size: 15px;
+    font-family: Consolas, "Courier New", monospace;
+    transition: 0.22s ease;
+}
+
+input::placeholder {
+    color: #629176;
+}
+
+input:focus {
+    border-color: #43d57d;
+    background: rgba(4, 16, 9, 0.98);
+}
+
+button {
+    padding: 15px 24px;
+    border-radius: 8px;
+    border: 1px solid #215736;
+    margin-left: 10px;
+    background: rgba(6, 17, 9, 0.95);
+    color: #e9fff0;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: Consolas, "Courier New", monospace;
+    transition: 0.22s ease;
+}
+
+button:hover {
+    background: #0a1b10;
+    border-color: #43d57d;
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* before search: no result box */
+#result:empty {
+    display: none;
+}
+
+/* result container */
+#result:not(:empty) {
+    max-width: 900px;
+    margin: 45px auto 0;
+    padding: 34px;
+    border-radius: 10px;
+    background: rgba(1, 7, 4, 0.96);
+    border: 1px solid #173f28;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* terminal top bar */
+#result:not(:empty)::before {
+    content: "gitpulse://profile-analysis";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 9px 14px;
+    text-align: left;
+    background: #020604;
+    color: #79db9f;
+    border-bottom: 1px solid #173f28;
+    font-size: 13px;
+}
+
+/* profile image */
+#result img {
+    width: 124px;
+    height: 124px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #2b8c54;
+    margin-top: 34px;
+    margin-bottom: 18px;
+    filter: contrast(1.04);
+}
+
+/* headings */
+#result h2 {
+    width: fit-content;
+    max-width: 100%;
+    margin: 20px auto 12px;
+    color: #f2fff6;
+    font-size: 26px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+    animation: terminalReveal 1.5s steps(32, end) forwards;
+}
+
+#result h3 {
+    width: fit-content;
+    color: #a9ffc7;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+    animation: terminalReveal 1.3s steps(24, end) forwards;
+}
+
+/* details */
+#result p {
+    color: #c4eed1;
+    margin: 9px 0;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+    animation: terminalReveal 1.25s steps(36, end) forwards;
+}
+
+/* links */
+#result a {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 11px 16px;
+    border-radius: 7px;
+    background: #061109;
+    color: #e9fff0;
+    text-decoration: none;
+    border: 1px solid #215736;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+    animation: terminalReveal 1.25s steps(28, end) forwards;
+    transition: 0.22s ease;
+}
+
+#result a:hover {
+    background: #0a1b10;
+    border-color: #43d57d;
+}
+
+#result > h2:last-of-type {
+    margin-top: 40px;
+    padding-top: 0;
+    border-top: none;
+}
+
+
+/* repo cards */
+#result > div {
+    margin-top: 18px;
+    padding: 20px;
+    border-radius: 9px;
+    background: #030b06;
+    border: 1px solid #12311f;
+    text-align: left;
+    clip-path: inset(0 100% 0 0);
+    animation: terminalReveal 1.45s steps(42, end) forwards;
+    transition: 0.22s ease;
+}
+
+#result > div:hover {
+    background: #07140b;
+    border-color: #2b8c54;
+}
+
+#result > div h3,
+#result > div p {
+    text-align: left;
+}
+
+/* small bottom signature only if your HTML has <div class="signature">Anirudh Pathi</div> */
+.signature {
+    position: fixed;
+    right: 22px;
+    bottom: 16px;
+    color: rgba(232, 255, 238, 0.16);
+    font-size: 12px;
+    letter-spacing: 2px;
+    pointer-events: none;
+}
+
+/* terminal reveal without cursor line */
+@keyframes terminalReveal {
+    from {
+        clip-path: inset(0 100% 0 0);
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+/* mobile */
+@media (max-width: 650px) {
+    body {
+        padding: 42px 14px;
+    }
+
+    .app-title {
+        font-size: 34px;
+        letter-spacing: 4px;
+    }
+
+    .tagline {
+        font-size: 12px;
+        letter-spacing: 1px;
+        white-space: normal;
+    }
+
+    input {
+        width: 100%;
+        max-width: 350px;
+        margin-bottom: 12px;
+    }
+
+    button {
+        width: 100%;
+        max-width: 350px;
+        margin-left: 0;
+    }
+
+    #result:not(:empty) {
+        padding: 28px 18px;
+    }
+
+    #result h2,
+    #result h3,
+    #result p,
+    #result a {
+        white-space: normal;
+    }
+
+    .signature {
+        right: 14px;
+        bottom: 10px;
+        font-size: 10px;
+    }
+}
+.profile-section {
+    padding-top: 32px;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 22px 0 6px;
+    flex-wrap: wrap;
+}
+
+.profile-stats div {
+    min-width: 120px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #030b06;
+    border: 1px solid #12311f;
+}
+
+.profile-stats span {
+    display: block;
+    color: #a9ffc7;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.score-section {
+    margin-top: 42px;
+    padding-top: 30px;
+    border-top: 1px solid #173f28;
+}
+
+.score-box {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 1px solid #2b8c54;
+    margin: 20px auto 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #030b06;
+}
+
+.score-box span {
+    font-size: 42px;
+    font-weight: 700;
+    color: #a9ffc7;
+}
+
+.score-box p {
+    margin: 0;
+    color: #77d99d;
+}
+
+.insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.insight-card {
+    padding: 18px;
+    border-radius: 9px;
+    background: #030b06;
+    border: 1px solid #12311f;
+}
+
+.insight-card span {
+    display: block;
+    color: #a9ffc7;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.suggestions-box {
+    margin-top: 18px;
+    padding: 20px;
+    border-radius: 9px;
+    background: #030b06;
+    border: 1px solid #12311f;
+    text-align: left;
+}
+
+.suggestions-box p {
+    margin: 10px 0;
+    white-space: normal;
+}
+
+.repo-list {
+    margin-top: 20px;
+}
+
+.repo-card {
+    margin-top: 18px;
+    padding: 20px;
+    border-radius: 9px;
+    background: #030b06;
+    border: 1px solid #12311f;
+    text-align: left;
+}
+
+.repo-card:hover,
+.insight-card:hover,
+.profile-stats div:hover {
+    background: #07140b;
+    border-color: #2b8c54;
+}
+.loading-box {
+    padding-top: 30px;
+}
+
+.loading-box h2 {
+    margin-bottom: 22px;
+}
+
+.terminal-loader {
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.terminal-loader p {
+    color: #a9ffc7;
+    margin: 12px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+    animation: terminalReveal 1.2s steps(38, end) forwards;
+}
+
+.terminal-loader p:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.terminal-loader p:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.terminal-loader p:nth-child(3) {
+    animation-delay: 0.9s;
+}
+
+.terminal-loader p:nth-child(4) {
+    animation-delay: 1.3s;
+}
+
+.terminal-loader p:nth-child(5) {
+    animation-delay: 1.7s;
+}
+
+.error-box {
+    padding-top: 30px;
+}
+
+.error-box h2 {
+    color: #e9fff0;
+    margin-bottom: 14px;
+}
+
+.error-box p {
+    color: #c4eed1;
+    white-space: normal;
+}
+
+.loading-state,
+.error-state,
+.success-state {
+    min-height: 160px;
+}
