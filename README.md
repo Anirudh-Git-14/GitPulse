@@ -62,10 +62,6 @@ GitPulse
 3. Open `index.html` in a browser.
 4. Enter a GitHub username and click Analyze.
 
-## Live Demo
-
-Coming soon.
-
 ## Future Improvements
 
 * Add contribution graph analysis
@@ -74,7 +70,3 @@ Coming soon.
 * Add downloadable profile report
 * Improve GitPulse score logic
 * Add more advanced developer insights
-
-## Author
-
-Anirudh Pathi
