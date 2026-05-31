@@ -4,6 +4,8 @@ GitPulse is a futuristic GitHub Profile Analyzer that fetches real GitHub profil
 
 It helps users analyze any public GitHub profile by showing profile details, repository stats, GitPulse score, insights, and improvement suggestions.
 
+A clean GitHub profile analyzer built using HTML, CSS, JavaScript, and GitHub API.
+
 ## Features
 
 * Search any GitHub user by username
