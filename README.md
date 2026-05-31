@@ -72,3 +72,7 @@ GitPulse
 * Add downloadable profile report
 * Improve GitPulse score logic
 * Add more advanced developer insights
+
+## Live Demo
+check out this live project here:
+https://anirudh-git-14.github.io/GitPulse/
